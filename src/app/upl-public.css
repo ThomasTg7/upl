@@ -1,0 +1,151 @@
+/* UPL Series: sporting surfaces (black studio, graphite smoke, gold of the belt), distinct from the admin workspace. */
+.upl-site {
+  --radius: 0px;
+  --upl-gold-light: #FFE7A3;
+  --upl-gold: #D9A82E;
+  --upl-gold-deep: #8A6318;
+  --upl-gold-metal: linear-gradient(180deg, #FFE7A3 0%, #F2CE6B 28%, #D9A82E 55%, #A87B17 78%, #F2CE6B 100%);
+}
+
+/* Poster typography: tall condensed display set in italics, like «UPL 15». */
+.upl-site .font-display {
+  font-style: italic;
+  font-synthesis: style;
+}
+
+.upl-site .font-wide {
+  font-family: var(--font-wide);
+  font-style: italic;
+  font-weight: 900;
+}
+
+.upl-site a:focus-visible,
+.upl-site button:focus-visible {
+  outline: 2px solid var(--color-accent-bright);
+  outline-offset: 5px;
+}
+
+.upl-header {
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, var(--upl-gold-deep), var(--upl-gold-light) 50%, var(--upl-gold-deep)) 1;
+}
+
+/* Shared metallic gold ink, taken from the championship belt. */
+.upl-site .upl-gradient-text,
+.upl-site .text-accent-bright:not(svg) {
+  color: transparent;
+  background-image: var(--upl-gold-metal);
+  background-clip: text;
+  -webkit-background-clip: text;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  /* The slanted display letters lean past their box: room so the gold ink is not cut on the last glyph. */
+  padding-inline-end: .12em;
+  margin-inline-end: -.12em;
+}
+
+.upl-site .upl-gradient-text svg,
+.upl-site .text-accent-bright svg { color: var(--color-brand); }
+
+.upl-site .upl-gradient-button {
+  background-image: var(--upl-gold-metal);
+  color: #000;
+}
+
+@media (forced-colors: active) {
+  .upl-site .upl-gradient-text,
+  .upl-site .text-accent-bright:not(svg) { color: LinkText; background-image: none; }
+}
+
+.upl-nav-link {
+  position: relative;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.upl-nav-link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: var(--upl-gold-metal);
+  transform: scaleX(0) skewX(-20deg);
+  transform-origin: left;
+  transition: transform 220ms var(--ease-upl);
+}
+
+.upl-nav-link:hover::after,
+.upl-nav-link[aria-current="page"]::after {
+  transform: scaleX(1) skewX(-20deg);
+}
+
+.upl-hero {
+  background: #000;
+}
+
+.upl-hero-image { object-position: var(--hero-desktop-position); }
+
+@media (max-width: 767px) {
+  .upl-hero-image { object-position: var(--hero-mobile-position); }
+}
+
+/* Studio light: graphite smoke with a warm gold spot behind the fighters. */
+.upl-hero-pulse {
+  background:
+    radial-gradient(ellipse 45% 55% at 50% 42%, rgba(226,178,58,.20), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(92,88,80,.55), transparent 72%),
+    linear-gradient(180deg, #1a1916 0%, #0b0b0a 70%, #000 100%);
+}
+
+.upl-hero-rule {
+  height: 4px;
+  width: 72px;
+  background: var(--upl-gold-metal);
+  transform: skewX(-24deg);
+}
+
+.upl-photo-card {
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.upl-photo-card img {
+  transition: transform 400ms var(--ease-upl);
+}
+
+.upl-photo-card:hover img {
+  transform: scale(1.025);
+}
+
+.upl-editorial {
+  color: #000;
+  background: #fff;
+}
+
+.upl-editorial a:focus-visible,
+.upl-editorial button:focus-visible {
+  outline-color: var(--color-brand-deep);
+}
+
+.upl-editorial [data-slot="post-card-meta"] {
+  color: var(--color-brand-press);
+}
+
+.upl-editorial article {
+  background: #f6f3ec;
+}
+
+.upl-editorial article h3,
+.upl-editorial article h2 {
+  color: #000;
+}
+
+.upl-editorial article [data-slot="post-card-excerpt"],
+.upl-editorial article [data-slot="post-card-meta"] span {
+  color: #5e5748;
+}
+
+.upl-editorial [data-slot="post-card-body"] {
+  background: #f6f3ec;
+}

@@ -1,0 +1,146 @@
+/* All custom motion changes only transform and opacity. */
+@keyframes upl-page-enter {
+  /* A transformed page wrapper becomes the containing block for fixed scroll pins. */
+  from { opacity: .8; }
+  to { opacity: 1; }
+}
+
+@keyframes upl-brand-enter {
+  from { opacity: 0; transform: translateX(-28px) skewX(-12deg) scale(.94); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes upl-stroke-enter {
+  from { opacity: 0; transform: translate(-40px, 40px); }
+  to { opacity: 1; transform: none; }
+}
+
+.upl-page-enter {
+  animation: upl-page-enter 280ms var(--ease-upl) both;
+}
+
+.upl-intro-logo { animation: upl-brand-enter 650ms var(--ease-upl) both; }
+.upl-intro-mark { animation: upl-stroke-enter 800ms var(--ease-upl) both; }
+
+.upl-intro-leaving {
+  opacity: 0;
+  transform: translateY(-16px);
+}
+
+/* Graphite smoke drifting behind the poster stage (two layers, opposite directions). */
+@keyframes upl-smoke-drift {
+  from { transform: translate3d(-6%, 0, 0) scale(1.05); }
+  to { transform: translate3d(6%, -3%, 0) scale(1.15); }
+}
+
+@keyframes upl-smoke-breathe {
+  0%, 100% { opacity: .55; }
+  50% { opacity: .9; }
+}
+
+.upl-smoke {
+  position: absolute;
+  inset: -15%;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side at 20% 30%, rgba(150,145,135,.22), transparent),
+    radial-gradient(closest-side at 70% 20%, rgba(120,116,108,.20), transparent),
+    radial-gradient(closest-side at 45% 65%, rgba(95,92,86,.24), transparent),
+    radial-gradient(closest-side at 85% 70%, rgba(130,126,118,.16), transparent);
+  filter: blur(18px);
+  animation: upl-smoke-drift 22s ease-in-out infinite alternate, upl-smoke-breathe 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.upl-smoke[data-layer="2"] {
+  animation-duration: 30s, 12s;
+  animation-direction: alternate-reverse, normal;
+  opacity: .6;
+}
+
+/* Gold light sweep across headings and the main CTA, like the shine of the belt. */
+@keyframes upl-shine {
+  0% { transform: translateX(-120%) skewX(-24deg); opacity: 0; }
+  15% { opacity: 1; }
+  45%, 100% { transform: translateX(320%) skewX(-24deg); opacity: 0; }
+}
+
+.upl-shine {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.upl-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,240,200,.55), transparent);
+  animation: upl-shine 4.8s var(--ease-upl) 1.2s infinite;
+}
+
+/* The diagonal cut of the logo wipes in on the hero. */
+@keyframes upl-slash-in {
+  from { opacity: 0; transform: translate3d(-30%, 30%, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+.upl-slash-in { animation: upl-slash-in 1100ms var(--ease-upl) both; }
+
+/* Billing rises in, line by line. Content is in the DOM from the first paint; only its entrance moves. */
+@keyframes upl-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+.upl-rise { animation: upl-rise 700ms var(--ease-upl) both; }
+.upl-rise[data-delay="1"] { animation-delay: 120ms; }
+.upl-rise[data-delay="2"] { animation-delay: 240ms; }
+.upl-rise[data-delay="3"] { animation-delay: 360ms; }
+
+@keyframes upl-watch-dialog-enter {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes upl-watch-dialog-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(.98); }
+}
+
+@keyframes upl-watch-overlay-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.upl-watch-dialog[data-state="open"] {
+  animation: upl-watch-dialog-enter 360ms var(--ease-upl) both;
+}
+
+.upl-watch-dialog[data-state="closed"] {
+  animation: upl-watch-dialog-exit 220ms ease-in both;
+}
+
+.upl-watch-overlay[data-state="open"] {
+  animation: upl-watch-overlay-enter 320ms ease-out both;
+}
+
+.upl-watch-overlay[data-state="closed"] {
+  animation: upl-watch-overlay-enter 220ms ease-in reverse both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upl-watch-dialog[data-state],
+  .upl-watch-overlay[data-state] { animation: none; }
+
+  .upl-page-enter,
+  .upl-intro-logo,
+  .upl-intro-mark,
+  .upl-slash-in,
+  .upl-rise,
+  .upl-smoke { animation: none; transform: none; }
+
+  .upl-shine::after { display: none; }
+}

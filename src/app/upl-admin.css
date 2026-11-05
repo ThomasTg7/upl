@@ -1,0 +1,97 @@
+/* A quiet workspace using the UPL identity (black and belt gold) without decorative motion on data. */
+.upl-admin,
+body:has(.upl-admin) {
+  --radius: .5rem;
+  --sidebar: #000;
+  --sidebar-accent: #241d10;
+  background: #0b0a08;
+}
+
+body:has(.upl-admin) [data-slot="sidebar-menu-button"] {
+  min-height: 44px;
+  border-radius: 6px;
+  transition: transform 180ms var(--ease-upl);
+}
+
+body:has(.upl-admin) [data-slot="sidebar-menu-button"]:hover {
+  transform: translateX(2px);
+}
+
+body:has(.upl-admin) [data-slot="sidebar-menu-button"][data-active="true"] {
+  color: var(--color-accent-bright);
+  font-weight: 600;
+  background: #241d10;
+  border-left: 2px solid var(--color-accent-bright);
+}
+
+body:has(.upl-admin) [data-slot="input"],
+body:has(.upl-admin) [data-slot="textarea"],
+body:has(.upl-admin) [data-slot="select-trigger"],
+body:has(.upl-admin) [data-slot="native-select"] {
+  background: #141210;
+  min-height: 44px;
+}
+
+body:has(.upl-admin) [data-slot="card"] {
+  background: #141210;
+  border-color: #3a3328;
+}
+
+body:has(.upl-admin) [data-slot="button"] {
+  min-height: 44px;
+  border-radius: 5px;
+}
+
+body:has(.upl-admin) [data-slot="button"][data-size^="icon"],
+body:has(.upl-admin) [data-slot="sidebar-trigger"] {
+  min-width: 44px;
+}
+
+body:has(.upl-admin) [data-slot="table-head"] {
+  font-size: .75rem;
+  color: #cfc6b5;
+  background: #19160f;
+}
+
+body:has(.upl-admin) [data-slot="dialog-content"],
+body:has(.upl-admin) [data-slot="popover-content"] {
+  border-radius: 8px;
+}
+
+.upl-admin-toolbar {
+  background: #0f0d0a;
+  border-bottom: 1px solid #3a3328;
+}
+
+.upl-admin-section {
+  border: 1px solid #3a3328;
+  background: #141210;
+  border-radius: 8px;
+}
+
+.upl-admin-title {
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.upl-admin-title {
+  font-style: italic;
+}
+
+.upl-admin .upl-admin-title::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-top: .4rem;
+  background: linear-gradient(90deg, #8A6318, #F2CE6B, #D9A82E);
+  transform: skewX(-24deg);
+  transform-origin: left;
+}
+
+/* The login card centres its title: the gold cut sits centred under it. */
+.upl-admin-section .upl-admin-title::after {
+  margin-inline: auto;
+}
