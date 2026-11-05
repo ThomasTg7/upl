@@ -1102,3 +1102,10 @@ Verificado sin cambios: la caché pública nunca sirve un borrador, uno en la pa
 - **Por qué:** pedido del usuario: clonar OFL con el estilo de los archivos de UPL (logo y afiche de UPL 15), dejar ese evento como próximo y una noticia creada.
 - **Impacto:** sin cambios de esquema ni de permisos. La hora sigue calculándose con la zona de Santiago (`src/lib/santiago-time.ts`): en noviembre coincide con Montevideo (UTC−3), pero en invierno Chile está en UTC−4; pasar a `America/Montevideo` es un cambio pendiente y acotado a ese módulo. Los precios siguen guardándose en `priceClp` y se muestran con el formato `$1.200`, que es el mismo que el peso uruguayo. Las 3 pruebas de «Quitar fondo» de `image-editor.test.tsx` ya fallaban en el repositorio original en este entorno; no se tocaron.
 - **Estado:** aplicado; `pnpm test` (salvo esas 3 preexistentes), `pnpm lint` y `pnpm typecheck` en verde; revisado en 375 px y 1440 px sin desbordamiento horizontal. Los e2e no se corrieron en esta sesión.
+
+## [UPL] Repositorio independiente `ThomasTg7/upl` — 2026-11-05
+
+- **Qué:** la plataforma UPL pasa a su propio repositorio, <https://github.com/ThomasTg7/upl>, rama `main`, con historial nuevo que parte de un commit inicial con el mismo contenido que la rama `upl-series` de `ThomasTg7/ofl`.
+- **Por qué:** pedido del usuario: separar la nueva promotora en un repositorio independiente. El historial de OFL/Guerra Campal no se arrastra (es de otras promotoras y vivía en un repositorio privado ajeno a UPL).
+- **Impacto:** sin cambios de código. `docs/OFL.md` queda marcado como histórico; los servicios de despliegue de OFL (Vercel, Neon, R2) no se reutilizan.
+- **Estado:** aplicado.

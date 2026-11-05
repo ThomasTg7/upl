@@ -1,3 +1,5 @@
+> **Histórico (OFL).** Este documento describe la instalación de Open Fight Latam de la que se clonó UPL (su repositorio, Vercel, Neon y R2). Nada de eso pertenece a UPL Series: ver `docs/UPL.md`.
+
 # OFL — copia independiente de Guerra Campal
 
 Creada el 11 de octubre de 2026 desde la carpeta local GuerraCampal. Conserva frontend, backend, panel, código, historial Git, documentación, migraciones, pruebas y archivos locales de imágenes. El diseño público y del panel corresponde a Open Fight Latam. Los datos y fotos de Guerra Campal se conservan como contenido heredado de vista previa.

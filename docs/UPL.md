@@ -2,6 +2,8 @@
 
 Plataforma web de la promotora de MMA **UPL Series** (Uruguay Premium League): sitio público (eventos, cartelera y resultados, peleadores, rankings, noticias, entradas) y panel de administración propio. Es un clon de la plataforma OFL con **todas** sus funciones (panel, peleas, eventos, noticias, rankings, patrocinadores, bandeja, noche de pelea en vivo…) y la identidad visual de UPL.
 
+Repositorio independiente: <https://github.com/ThomasTg7/upl> (rama `main`). No comparte historial ni servicios con OFL: la base de datos, el almacenamiento de imágenes y el despliegue de UPL se configuran aparte (`docs/deploy.md`, `docs/vps-migration.md`).
+
 ## Ver el proyecto en tu computador (paso a paso)
 
 Requisitos (una sola vez):
@@ -11,10 +13,10 @@ Requisitos (una sola vez):
 - **Docker Desktop** — <https://www.docker.com/products/docker-desktop/> (levanta la base de datos Postgres). Ábrelo y déjalo corriendo.
 - **Git** — <https://git-scm.com>.
 
-1. Descarga el código (cambia la URL por la de tu repositorio):
+1. Descarga el código:
 
    ```bash
-   git clone https://github.com/<tu-usuario>/upl.git
+   git clone https://github.com/ThomasTg7/upl.git
    cd upl
    ```
 
