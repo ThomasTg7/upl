@@ -1,6 +1,7 @@
 import { BRAND } from "@/domain/brand";
 import Link from "next/link";
 import { MediaImage } from "@/components/media/media-image";
+import { Button } from "@/components/ui-gc/button";
 import { Tag } from "@/components/ui-gc/tag";
 import { EVENT_STATUS_LABELS } from "@/domain/bout-enums";
 import { formatShortDate, formatTime } from "@/lib/format-date";
@@ -38,6 +39,8 @@ export function EventCard({ event, variant, priority = false }: EventCardProps) 
   const start = new Date(event.startsAt);
   const main = event.mainBout;
   const upcoming = variant === "upcoming";
+  const eventHref = `/eventos/${event.slug}`;
+  const ticketUrl = upcoming && event.eventStatus !== "cancelled" ? event.ticketUrl : null;
   const status = event.eventStatus === "scheduled" || event.eventStatus === "completed" ? null : event.eventStatus;
   const measure = main ? boutMeasure(main) : "";
 
@@ -56,7 +59,7 @@ export function EventCard({ event, variant, priority = false }: EventCardProps) 
           {main?.isTitleFight ? <Tag tone="outline">Pelea por el título</Tag> : null}
         </div>
         <h3 className={`font-display uppercase leading-[.95] text-white ${upcoming ? "text-[clamp(30px,5vw,56px)]" : "text-[clamp(26px,4vw,34px)]"}`}>
-          <Link href={`/eventos/${event.slug}`} className="outline-none after:absolute after:inset-0">
+          <Link href={eventHref} className="focus-visible:outline focus-visible:outline-brand after:absolute after:inset-0">
             {event.name}
           </Link>
         </h3>
@@ -71,22 +74,21 @@ export function EventCard({ event, variant, priority = false }: EventCardProps) 
         ) : (
           <p className="font-cond text-base font-semibold uppercase tracking-[.06em] text-muted-foreground">Cartelera por anunciar</p>
         )}
-        {upcoming && event.eventStatus !== "cancelled" ? (
-          <div className="mt-auto flex flex-wrap items-center gap-3 pt-3">
-            <span className="border-b-2 border-brand font-cond text-sm font-extrabold uppercase tracking-[.1em] text-white">Ver evento</span>
-            {event.ticketUrl ? (
-              <a
-                href={event.ticketUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative z-10 bg-brand px-5 py-3 font-cond text-sm font-extrabold uppercase tracking-[.08em] text-on-brand transition-transform hover:-translate-y-0.5 hover:bg-brand hover:text-on-brand-hover"
-              >
-                Entradas
-              </a>
-            ) : null}
-          </div>
-        ) : null}
-        {event.eventStatus !== "cancelled" ? <div className="relative z-10 mt-2"><WatchEventButton eventName={event.name} platforms={event.watchPlatforms} className="px-5 py-3" /></div> : null}
+        <div className={`relative z-10 mt-auto grid w-full gap-3 pt-3 sm:max-w-sm ${ticketUrl ? "grid-cols-2" : "grid-cols-1"}`}>
+          <Button asChild variant="ghost" className="min-w-0 px-2 py-3">
+            <Link href={eventHref}>Ver evento</Link>
+          </Button>
+          {ticketUrl ? (
+            <Button asChild variant="primary" className="min-w-0 px-2 py-3">
+              <a href={ticketUrl} target="_blank" rel="noopener noreferrer">Entradas</a>
+            </Button>
+          ) : null}
+          {event.eventStatus !== "cancelled" ? (
+            <WatchEventButton eventName={event.name} platforms={event.watchPlatforms} ariaLabel="Dónde ver evento" className="col-span-full px-2 py-3">
+              Dónde ver evento
+            </WatchEventButton>
+          ) : null}
+        </div>
       </div>
     </article>
   );

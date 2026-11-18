@@ -29,6 +29,27 @@ test("/eventos separa Próximos y Pasados y no desborda", async ({ page }) => {
 
   // La tarjeta muestra el combate estelar y lleva a la página del evento.
   await expect(upcoming.locator('[data-event="upl-5"]')).toContainText("Pérez vs Soto");
+  const actions = upcoming.locator('[data-event="upl-5"]');
+  const eventLink = actions.getByRole("link", { name: "Ver evento", exact: true });
+  const tickets = actions.getByRole("link", { name: "Entradas", exact: true });
+  const watch = actions.getByRole("button", { name: "Dónde ver evento", exact: true });
+  await expect(eventLink).toHaveAttribute("href", "/eventos/upl-5");
+  await expect(tickets).toHaveAttribute("href", /example\.com\/entradas\/upl-5/);
+  for (const width of [375, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const first = (await eventLink.boundingBox())!;
+    const second = (await tickets.boundingBox())!;
+    const third = (await watch.boundingBox())!;
+    expect(first.y).toBe(second.y);
+    expect(second.x).toBeGreaterThan(first.x);
+    expect(third.y).toBeGreaterThanOrEqual(first.y + first.height);
+    expect(third.x).toBeCloseTo(first.x, 0);
+    expect(third.x + third.width).toBeCloseTo(second.x + second.width, 0);
+    if (width === 375) {
+      const card = (await actions.boundingBox())!;
+      expect(third.x - card.x).toBeCloseTo(card.x + card.width - third.x - third.width, 0);
+    }
+  }
   await upcoming.getByRole("link", { name: "UPL 5" }).click();
   await expect(page).toHaveURL(/\/eventos\/upl-5$/);
 

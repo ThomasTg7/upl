@@ -40,7 +40,7 @@ for (const width of [375, 1440]) {
 
     await page.goto("/eventos");
     const card = page.locator(`[data-event="${slug}"]`);
-    await card.getByRole("button", { name: "Ver", exact: true }).click();
+    await card.getByRole("button", { name: "Dónde ver evento", exact: true }).click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toContainText(name);
     await expect(dialog.getByRole("link", { name: "Ir a ver en Twitch UPL" })).toHaveAttribute("href", "https://twitch.tv/upl-e2e");
@@ -51,7 +51,7 @@ for (const width of [375, 1440]) {
     await page.screenshot({ path: `test-results/event-watch-modal-${width}.png` });
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
-    await expect(card.getByRole("button", { name: "Ver", exact: true })).toBeFocused();
+    await expect(card.getByRole("button", { name: "Dónde ver evento", exact: true })).toBeFocused();
     if (width === 1440) {
       const before = await page.evaluate(() => scrollY);
       await page.mouse.move(700, 600);

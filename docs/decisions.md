@@ -1109,3 +1109,9 @@ Verificado sin cambios: la caché pública nunca sirve un borrador, uno en la pa
 - **Por qué:** pedido del usuario: separar la nueva promotora en un repositorio independiente. El historial de OFL/Guerra Campal no se arrastra (es de otras promotoras y vivía en un repositorio privado ajeno a UPL).
 - **Impacto:** sin cambios de código. `docs/OFL.md` queda marcado como histórico; los servicios de despliegue de OFL (Vercel, Neon, R2) no se reutilizan.
 - **Estado:** aplicado.
+
+## [UPL] Acciones de las tarjetas de eventos - 2026-11-17
+
+- **Qué:** en el listado, «Ver evento» y «Entradas» comparten la primera fila. «Dónde ver evento» ocupa una segunda fila completa y abre el modal de plataformas de transmisión.
+- **Por qué:** en móvil el enlace a la ficha no parecía un botón y la acción «Ver» no indicaba qué abría.
+- **Impacto:** cambia la presentación y las etiquetas del listado público. Se conservan las condiciones de venta y las plataformas configuradas por evento. No requiere cambios en los planes siguientes.
