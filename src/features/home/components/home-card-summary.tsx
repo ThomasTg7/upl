@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { Button } from "@/components/ui-gc/button";
 import { SectionHeading } from "@/components/ui-gc/section-heading";
 import { BoutAccordion } from "@/features/events/components/bout-accordion";
 import { BoutRow } from "@/features/events/components/bout-row";
 import { EventSchedule } from "@/features/events/components/event-schedule";
+import { EventActionContent, eventActionClass } from "@/features/events/components/event-action-content";
 import { FightCardTabs } from "@/features/events/components/fight-card-tabs";
 import { WatchEventButton } from "@/features/events/components/watch-event-button";
 import type { HomeEvent } from "../dto";
@@ -33,13 +35,19 @@ export function HomeCardSummary({ event, rankLabels, kind }: HomeCardSummaryProp
             }
             tone="light"
             action={
-              <div className="flex flex-wrap items-center gap-4">
-                <Link href={`/eventos/${event.slug}`} className="inline-flex min-h-11 items-center border-b-2 border-brand pb-1 font-cond text-sm font-extrabold uppercase tracking-[.1em] text-black">
-                  Ver evento <span aria-hidden>→</span>
-                </Link>
-                <WatchEventButton eventName={event.name} platforms={event.watchPlatforms} />
+              <div data-slot="home-card-actions" className={`grid w-full max-w-[640px] grid-cols-2 gap-2 ${isLast ? "md:max-w-[440px]" : "md:grid-cols-3"}`}>
+                <Button variant="outline-light" className={eventActionClass} asChild>
+                  <Link href={`/eventos/${event.slug}`}><EventActionContent kind="event">Ver evento</EventActionContent></Link>
+                </Button>
+                {!isLast ? <Button variant="outline-light" className={eventActionClass} asChild>
+                  <a href={event.ticketUrl ?? "/entradas"} {...(event.ticketUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}><EventActionContent kind="tickets">Entradas</EventActionContent></a>
+                </Button> : null}
+                <WatchEventButton eventName={event.name} platforms={event.watchPlatforms} variant="outline-light" ariaLabel="Dónde ver" className={`${eventActionClass} ${isLast ? "" : "col-span-full md:col-span-1"}`}>
+                  <EventActionContent kind="watch">Dónde ver</EventActionContent>
+                </WatchEventButton>
               </div>
             }
+            className="flex-col items-start"
           />
         </div>
         {segments.length > 0 ? (

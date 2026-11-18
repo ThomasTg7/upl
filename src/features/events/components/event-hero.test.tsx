@@ -29,7 +29,7 @@ describe("EventHero background lettering", () => {
   it("opens Dónde ver with the configured broadcast link", () => {
     render(<EventHero event={{ ...event(cover), streamUrl: "https://youtube.com/watch?v=test" }} showCountdown={false} />);
     const trigger = screen.getByRole("button", { name: "Dónde ver" });
-    expect(trigger).toHaveClass("bg-brand", "text-on-brand");
+    expect(trigger).toHaveClass("col-span-full", "md:col-span-1", "border-white/45");
     fireEvent.click(trigger);
     expect(screen.getByRole("dialog")).toBeVisible();
     expect(screen.getByRole("link", { name: /Ir a ver/ })).toHaveAttribute("href", "https://youtube.com/watch?v=test");

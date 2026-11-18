@@ -7,8 +7,9 @@ import { Button } from "@/components/ui-gc/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import type { WatchPlatformDTO } from "../dto";
 
-export function WatchEventButton({ eventName, platforms = [], children = "Ver", className, ariaLabel = "Ver" }: {
+export function WatchEventButton({ eventName, platforms = [], children = "Ver", className, ariaLabel = "Ver", variant = "primary" }: {
   eventName: string; platforms?: WatchPlatformDTO[]; children?: ReactNode; className?: string; ariaLabel?: string;
+  variant?: "primary" | "ghost" | "outline-light";
 }) {
   const [open, setOpen] = useState(false);
   const lenis = useLenis();
@@ -19,7 +20,7 @@ export function WatchEventButton({ eventName, platforms = [], children = "Ver", 
   }, [open, lenis]);
 
   return <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger asChild><Button type="button" variant="primary" className={className} aria-label={ariaLabel}>{children}</Button></DialogTrigger>
+    <DialogTrigger asChild><Button type="button" variant={variant} className={className} aria-label={ariaLabel}>{children}</Button></DialogTrigger>
     <DialogContent data-lenis-prevent overlayClassName="upl-watch-overlay z-[190] bg-black/80" className="upl-site upl-watch-dialog z-[200] max-h-[85dvh] overflow-y-auto rounded-none border border-border bg-surface p-6 text-white sm:max-w-xl">
       <DialogTitle className="pr-8 font-display text-3xl uppercase upl-gradient-text">Dónde ver</DialogTitle>
       <DialogDescription className="text-white/70">{eventName} · Elige tu plataforma para ver la transmisión.</DialogDescription>

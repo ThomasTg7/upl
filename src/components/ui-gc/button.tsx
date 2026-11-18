@@ -2,7 +2,7 @@ import { Slot } from "radix-ui";
 import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/cn";
 
-type ButtonVariant = "primary" | "ghost" | "dark";
+type ButtonVariant = "primary" | "ghost" | "dark" | "outline-light";
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> & {
   variant: ButtonVariant;
@@ -16,6 +16,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-brand text-on-brand before:bg-brand-hover before:-translate-x-full hover:before:translate-x-0 hover:-translate-y-0.5",
   ghost: "border border-white/45 text-white before:bg-surface-2 before:translate-y-full hover:before:translate-y-0",
   dark: "bg-black text-white hover:text-on-brand before:bg-brand before:-translate-x-full hover:before:translate-x-0",
+  "outline-light": "border border-black/40 text-black hover:border-brand before:bg-brand/15 before:translate-y-full hover:before:translate-y-0",
 };
 
 export function Button({ variant, asChild, className, ...props }: ButtonProps) {

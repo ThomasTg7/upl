@@ -7,6 +7,7 @@ import type { EventPageDTO } from "../dto";
 import { pickMainBout } from "../main-bout";
 import { eventStatusTag } from "../public-format";
 import { Countdown } from "./countdown";
+import { EventActionContent, eventActionClass } from "./event-action-content";
 import { EventHeroArt } from "./event-hero-art";
 import { WatchEventButton } from "./watch-event-button";
 
@@ -18,7 +19,6 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
   const main = pickMainBout(event.segments.flatMap((segment) => segment.bouts), (bout) => bout.status === "cancelled");
   const start = new Date(event.startsAt);
   const status = eventStatusTag(event.eventStatus);
-  const watchLabel = <><span className="min-[400px]:hidden">Ver</span><span className="hidden min-[400px]:inline">Dónde ver</span></>;
   return (
     <section id={EVENT_HERO_ID} data-site-hero aria-labelledby="event-title" className="upl-hero relative isolate flex min-h-[max(760px,100svh)] items-end overflow-hidden pt-24 text-center lg:min-h-[max(850px,100svh)]">
       <EventHeroArt event={event} main={main} />
@@ -35,10 +35,10 @@ export function EventHero({ event, ticketHref, ticketExternal = false, showCount
           <p className="upl-rise mt-5 font-cond text-base font-bold italic tracking-[.28em] text-white uppercase sm:text-lg" data-delay="2">{formatShortDate(start)} · {formatTime(start)} hrs</p>
           <p className="mt-1 text-sm text-white/70">{event.venue.name}{event.venue.city ? `, ${event.venue.city}` : ""}</p>
           {showCountdown ? <Countdown target={event.startsAt} className="my-6 justify-center" /> : <div className="h-6" />}
-          <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
-            {ticketHref ? <Button variant="primary" className="upl-shine order-1 min-w-0 whitespace-nowrap px-4 sm:px-7" asChild><a href={ticketHref} aria-label="Comprar entradas" {...(ticketExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}><span className="min-[400px]:hidden">Entradas</span><span className="hidden min-[400px]:inline">Comprar entradas</span></a></Button> : null}
-            <Button variant="ghost" className="order-3 col-span-2 sm:order-2" asChild><SmoothAnchor href="#cartelera">{event.eventStatus === "completed" ? "Ver cartelera y resultados" : "Ver cartelera completa"}</SmoothAnchor></Button>
-            <WatchEventButton eventName={event.name} platforms={event.watchPlatforms ?? (event.streamUrl ? [{ name: "Transmisión oficial", url: event.streamUrl, media: null }] : [])} ariaLabel="Dónde ver" className={`order-2 min-w-0 whitespace-nowrap px-4 sm:order-3 sm:px-7 ${!ticketHref ? "col-span-2" : ""}`}>{watchLabel}</WatchEventButton>
+          <div data-slot="event-hero-actions" className={`mx-auto grid max-w-[640px] gap-2 ${ticketHref ? "grid-cols-2 md:grid-cols-3" : "md:max-w-[440px] md:grid-cols-2"}`}>
+            <Button variant="ghost" className={eventActionClass} asChild><SmoothAnchor aria-label={event.eventStatus === "completed" ? "Ver cartelera y resultados" : "Ver cartelera completa"} href="#cartelera"><EventActionContent kind="event">{event.eventStatus === "completed" ? "Ver resultados" : "Ver cartelera"}</EventActionContent></SmoothAnchor></Button>
+            {ticketHref ? <Button variant="ghost" className={eventActionClass} asChild><a href={ticketHref} aria-label="Comprar entradas" {...(ticketExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}><EventActionContent kind="tickets">Entradas</EventActionContent></a></Button> : null}
+            <WatchEventButton eventName={event.name} platforms={event.watchPlatforms ?? (event.streamUrl ? [{ name: "Transmisión oficial", url: event.streamUrl, media: null }] : [])} variant="ghost" ariaLabel="Dónde ver" className={`${eventActionClass} col-span-full md:col-span-1`}><EventActionContent kind="watch">Dónde ver</EventActionContent></WatchEventButton>
           </div>
         </div>
       </div>

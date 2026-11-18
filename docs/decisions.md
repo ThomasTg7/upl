@@ -1115,3 +1115,9 @@ Verificado sin cambios: la caché pública nunca sirve un borrador, uno en la pa
 - **Qué:** en el listado, «Ver evento» y «Entradas» comparten la primera fila. «Dónde ver evento» ocupa una segunda fila completa y abre el modal de plataformas de transmisión.
 - **Por qué:** en móvil el enlace a la ficha no parecía un botón y la acción «Ver» no indicaba qué abría.
 - **Impacto:** cambia la presentación y las etiquetas del listado público. Se conservan las condiciones de venta y las plataformas configuradas por evento. No requiere cambios en los planes siguientes.
+
+## [UPL] Botones de la portada y la ficha del evento - 2026-11-17
+
+- **Qué:** las acciones del hero y de la cartelera de inicio usan botones delineados con iconos. Con tres acciones, «Dónde ver» ocupa la segunda fila en móvil y las tres acciones comparten una fila en escritorio.
+- **Por qué:** adaptar las referencias de escritorio y móvil proporcionadas por el usuario a la identidad de UPL.
+- **Impacto:** la cartelera de inicio añade acceso a entradas para el próximo evento usando el mismo destino que el hero. Los enlaces del hero y el modal de transmisión conservan su comportamiento. No requiere cambios en los planes siguientes.
