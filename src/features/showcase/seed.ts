@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { and, eq, gte, inArray, sql } from "drizzle-orm";
+import { and, eq, gte, inArray, isNull, sql } from "drizzle-orm";
 import type { Db } from "@/db";
 import { divisions } from "@/db/schema/divisions";
 import { bouts, cardSegments, events, type TicketTier } from "@/db/schema/events";
@@ -62,6 +62,22 @@ const JUAN: ShowcaseFighter = {
   headshot: "juan-rodriguez-headshot.webp",
 };
 
+/** Fotos reutilizadas de las plataformas hermanas (NBS y OFL), recortadas sin fondo: slug del peleador → archivo en `scripts/seed-assets/`. */
+const FIGHTER_PHOTOS: ReadonlyArray<readonly [slug: string, file: string]> = [
+  ["matias-perez", "fighters/matias-perez-body.png"],
+  ["diego-soto", "fighters/diego-soto-body.png"],
+  ["felipe-araya", "fighters/felipe-araya-body.png"],
+  ["ignacio-fuentes", "fighters/ignacio-fuentes-body.png"],
+  ["bruno-andrade", "fighters/bruno-andrade-body.png"],
+  ["joaquin-nunez", "fighters/joaquin-nunez-body.png"],
+  ["sebastian-lagos", "fighters/sebastian-lagos-body.png"],
+  ["martin-olivares", "fighters/martin-olivares-body.png"],
+  ["nicolas-ibarra", "fighters/nicolas-ibarra-body.png"],
+  ["camila-rojas", "fighters/camila-rojas-body.png"],
+  ["valentina-cortes", "fighters/valentina-cortes-body.avif"],
+  ["javiera-munoz", "fighters/javiera-munoz-body.avif"],
+];
+
 const TIERS: TicketTier[] = [
   { name: "General", description: "Tribuna · Acceso 14:00", priceClp: 600, soldOut: false },
   { name: "Preferencial", description: "Platea cerca de la jaula", priceClp: 1200, soldOut: false },
@@ -69,11 +85,16 @@ const TIERS: TicketTier[] = [
 ];
 
 /** Sube un archivo de `scripts/seed-assets` por el mismo camino que el panel: original, variantes WebP y `ready`. */
+const MIME_BY_EXTENSION: Record<string, string> = { webp: "image/webp", png: "image/png", avif: "image/avif", jpg: "image/jpeg" };
+
 async function seedImage(db: Db, storage: StorageDriver, kind: MediaKind, file: string, alt: string, focal = { x: 0.5, y: 0.5 }): Promise<string> {
   const id = randomUUID();
-  const originalKey = `originals/${kind}/${id}.webp`;
-  await storage.put(originalKey, await readFile(path.join(ASSETS, file)), "image/webp");
-  await db.insert(media).values({ id, kind, originalKey, mime: "image/webp" });
+  const extension = path.extname(file).slice(1);
+  const mime = MIME_BY_EXTENSION[extension];
+  if (!mime) throw new Error(`Formato de imagen no soportado en la vitrina: ${file}`);
+  const originalKey = `originals/${kind}/${id}.${extension}`;
+  await storage.put(originalKey, await readFile(path.join(ASSETS, file)), mime);
+  await db.insert(media).values({ id, kind, originalKey, mime });
   await finalizeUpload(db, storage, id);
   await saveMediaEdit(db, storage, id, { ...DEFAULT_EDIT, focal, alt });
   return id;
@@ -230,6 +251,21 @@ async function seedShowcaseNews(db: Db, storage: StorageDriver, eventId: string,
   await db.insert(postEvents).values({ postId: created!.id, eventId });
 }
 
+/** Fotos de cuerpo completo (recortadas sin fondo) para los peleadores de ejemplo que aún no tienen foto. */
+async function seedFighterPhotos(db: Db, storage: StorageDriver): Promise<void> {
+  const rows = await db
+    .select({ id: fighters.id, slug: fighters.slug, firstName: fighters.firstName, lastName: fighters.lastName })
+    .from(fighters)
+    .where(and(inArray(fighters.slug, FIGHTER_PHOTOS.map(([slug]) => slug)), isNull(fighters.bodyMediaId)));
+  const fileBySlug = new Map(FIGHTER_PHOTOS);
+  for (const row of rows) {
+    const file = fileBySlug.get(row.slug);
+    if (!file) continue;
+    const bodyMediaId = await seedImage(db, storage, "fighter_body", file, `${row.firstName} ${row.lastName}`);
+    await db.update(fighters).set({ bodyMediaId, updatedAt: new Date() }).where(eq(fighters.id, row.id));
+  }
+}
+
 export async function seedUplShowcase(db: Db, storage: StorageDriver = getStorage()): Promise<void> {
   const [division] = await db.select({ id: divisions.id, limitKg: divisions.limitKg }).from(divisions).where(eq(divisions.slug, "peso-ligero")).limit(1);
   if (!division) throw new Error("Falta la división peso ligero: corre primero el seed de divisiones");
@@ -240,4 +276,5 @@ export async function seedUplShowcase(db: Db, storage: StorageDriver = getStorag
   await setChampion(db, "amateur", division.id, mateoId, "seed").catch(() => undefined);
   const eventId = await dressUpcomingEvent(db, storage, mateoId, juanId, division.id);
   await seedShowcaseNews(db, storage, eventId, [mateoId, juanId]);
+  await seedFighterPhotos(db, storage);
 }
